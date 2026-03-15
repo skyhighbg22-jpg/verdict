@@ -55,9 +55,12 @@ npm run dev
 
 ### Testing Mode
 
-Set `VITE_TESTING_MODE=true` to route all requests through OpenRouter with free models:
+Set `VITE_TESTING_MODE=true` to route all requests through OpenRouter with specific free models:
 - Single API key required (OpenRouter)
-- Uses free models including minimax/minimax-m2.5:free and deepseek-ai/deepseek-v3.2
+- Uses free models including:
+  - openrouter/hunter-alpha (main model - more smarter)
+  - minimax/minimax-m2.5:free (second main model)
+  - deepseek-ai/deepseek-v3.2 (for reasoning/coding tasks)
 - Faster development iteration
 - Simplified debugging
 - Reduced API costs
