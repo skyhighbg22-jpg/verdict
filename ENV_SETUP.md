@@ -42,7 +42,11 @@ npm run dev
 
 **Benefits:**
 - Only need one API key (OpenRouter)
-- Uses free models including minimax/minimax-m2.5:free and deepseek-ai/deepseek-v3.2
+- Uses free models including:
+  - openrouter/hunter-alpha (main model - more smarter)
+  - minimax/minimax-m2.5:free (second main model)
+  - deepseek-ai/deepseek-v3.2 (for reasoning/coding tasks)
+  - Can skip Nvidia API entirely
 - Faster development iteration
 - Simplified debugging
 - Reduced API costs

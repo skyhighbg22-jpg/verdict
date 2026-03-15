@@ -11,14 +11,15 @@ class OpenRouterProvider {
     this.baseUrl = 'https://openrouter.ai/api/v1';
     
       // Model mappings (OpenRouter uses provider/model format)
-      // Using free models as requested
+      // Using free models as requested - prioritizing hunter-alpha and minimax
+      // Can skip Nvidia API entirely by using these models
       this.modelMappings = {
         'gpt-5.4-pro': 'openrouter/hunter-alpha', // main model, more smarter
         'gemini-3.1-pro': 'openrouter/hunter-alpha', // main model, more smarter
         'grok-4.2': 'openrouter/hunter-alpha', // main model, more smarter
         'claude-opus-4.6': 'openrouter/hunter-alpha', // main model, more smarter
-        'step-flash': 'nvidia/nemotron-3-super-120b-a12b:free', // using free nemotron super
-        'nemotron-3-super': 'nvidia/nemotron-3-super-120b-a12b:free' // using free nemotron super
+        'step-flash': 'minimax/minimax-m2.5:free', // using free minimax instead of step flash
+        'nemotron-3-super': 'minimax/minimax-m2.5:free' // using free minimax instead of nemotron
       };
   }
 

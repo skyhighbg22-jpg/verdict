@@ -69,9 +69,10 @@ This document summarizes the deployment-ready environment configuration implemen
 
 #### `src/api/providers/openrouterProvider.js`
 - OpenRouter API integration (multi-provider)
-- Uses free models: nvidia/nemotron-3-super-120b-a12b:free, openrouter/hunter-alpha, minimax/minimax-m2.5:free, deepseek-ai/deepseek-v3.2
+- Uses free models: openrouter/hunter-alpha (main), minimax/minimax-m2.5:free (second main)
+- Can skip Nvidia API entirely by using these models
 - Primary provider for most models in normal mode
-- Used for testing mode with specific model mappings
+- Used for testing mode with specific model mappings (minimax and deepseek models)
 
 #### `src/api/providers/nvidiaProvider.js`
 - NVIDIA API integration (step flash and nemotron 3 super)
@@ -176,12 +177,12 @@ This document summarizes the deployment-ready environment configuration implemen
 
 | Internal Model ID | Primary Providers (in order) | Fallback Chain | Testing Mode |
 |------------------|---------------------------|----------------|---------------|
-| `gpt-5.4-pro` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
-| `grok-4.2` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
-| `gemini-3.1-pro` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
-| `claude-opus-4.6` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
-| `step-flash` | OpenRouter (free models: nvidia/nemotron-3-super-120b-a12b:free) | NVIDIA → Groq | → OpenRouter (free models: minimax/minimax-m2.5:free) |
-| `nemotron-3-super` | OpenRouter (free models: nvidia/nemotron-3-super-120b-a12b:free) | NVIDIA → Groq | → OpenRouter (free models: minimax/minimax-m2.5:free) |
+| `gpt-5.4-pro` | OpenRouter (free models: openrouter/hunter-alpha) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: deepseek-ai/deepseek-v3.2) |
+| `grok-4.2` | OpenRouter (free models: openrouter/hunter-alpha) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: openrouter/hunter-alpha) |
+| `gemini-3.1-pro` | OpenRouter (free models: openrouter/hunter-alpha) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: openrouter/hunter-alpha) |
+| `claude-opus-4.6` | OpenRouter (free models: openrouter/hunter-alpha) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: deepseek-ai/deepseek-v3.2) |
+| `step-flash` | OpenRouter (free models: minimax/minimax-m2.5:free) | NVIDIA → Groq | → OpenRouter (free models: minimax/minimax-m2.5:free) |
+| `nemotron-3-super` | OpenRouter (free models: minimax/minimax-m2.5:free) | NVIDIA → Groq | → OpenRouter (free models: minimax/minimax-m2.5:free) |
 
 ## Key Features
 

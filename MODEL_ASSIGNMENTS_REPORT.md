@@ -47,19 +47,38 @@ This document details the model assignments in the VERDICT architecture, includi
 **Model Usage:**
 - **Primary Model:** OpenRouter API with free models (replacing all external model APIs)
 - **Specific Assignments:**
-  - TDS Analysis: OpenRouter (minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2)
-  - GDE: OpenRouter (minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2)
-  - MIRA Calibration: OpenRouter (minimax/minimax-m2.5:free)
-  - Planning Branches: OpenRouter (minimax/minimax-m2.5:free)
-  - Research: OpenRouter (minimax/minimax-m2.5:free)
-  - Causal Validation: OpenRouter (minimax/minimax-m2.5:free)
-  - Skeptic Agent: OpenRouter (minimax/minimax-m2.5:free)
-  - Advisory Layer: OpenRouter (minimax/minimax-m2.5:free)
-  - Implementation: OpenRouter (minimax/minimax-m2.5:free)
-  - Self-Critique: OpenRouter (minimax/minimax-m2.5:free)
-  - Pipeline Analysis: OpenRouter (minimax/minimax-m2.5:free)
-  - Jury Evaluation: OpenRouter (minimax/minimax-m2.5:free)
-  - Anchor Reconciliation: OpenRouter (minimax/minimax-m2.5:free)
+  - TDS Analysis: OpenRouter (deepseek-ai/deepseek-v3.2) - excels at reasoning
+  - GDE: OpenRouter (deepseek-ai/deepseek-v3.2) - excels at reasoning
+  - MIRA Calibration: OpenRouter (minimax/minimax-m2.5:free) - second main model
+  - Planning Branches: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+  - Research: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+  - Causal Validation: OpenRouter (deepseek-ai/deepseek-v3.2) - excels at reasoning
+  - Skeptic Agent: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+  - Advisory Layer: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+  - Implementation: OpenRouter (minimax/minimax-m2.5:free) - second main model
+  - Self-Critique: OpenRouter (minimax/minimax-m2.5:free) - second main model
+  - Pipeline Analysis: OpenRouter (minimax/minimax-m2.5:free) - second main model
+  - Jury Evaluation: OpenRouter (minimax/minimax-m2.5:free) - second main model
+  - Anchor Reconciliation: OpenRouter (minimax/minimax-m2.5:free) - second main model
+
+### Free Mode
+**Purpose:** Shows what free models would be used in a completely free configuration
+**Note:** This is not an active mode, but shows the model assignments that would be used
+when no enterprise credentials are configured and the system falls back to free models
+**Model Usage (what would be used in fallback/free scenarios):**
+- TDS Analysis: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- GDE: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- MIRA Calibration: OpenRouter (minimax/minimax-m2.5:free) - second main model
+- Planning Branches: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- Research: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- Causal Validation: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- Skeptic Agent: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- Advisory Layer: OpenRouter (openrouter/hunter-alpha) - main model (more smarter)
+- Implementation: OpenRouter (minimax/minimax-m2.5:free) - second main model
+- Self-Critique: OpenRouter (minimax/minimax-m2.5:free) - second main model
+- Pipeline Analysis: OpenRouter (minimax/minimax-m2.5:free) - second main model
+- Jury Evaluation: OpenRouter (minimax/minimax-m2.5:free) - second main model
+- Anchor Reconciliation: OpenRouter (minimax/minimax-m2.5:free) - second main model
 
 **Benefits:**
 - Single API key required (OpenRouter)

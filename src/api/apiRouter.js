@@ -122,17 +122,23 @@ export async function routeRequest(modelId, input) {
        console.log(`[APIRouter] 🧪 Testing Mode: Routing ${modelId} to OpenRouter (free models)`);
      }
      
-     // Define model mappings for testing mode
-     const TESTING_MODE_MAPPINGS = {
-       // Use minimax for most tasks
-       'default': 'minimax/minimax-m2.5:free',
-       // Use deepseek for tasks where it excels (reasoning, coding, etc.)
-       'gpt-5.4-pro': 'deepseek-ai/deepseek-v3.2',
-       'claude-opus-4.6': 'deepseek-ai/deepseek-v3.2',
-       // Avoid step flash models as requested
-       'step-flash': 'minimax/minimax-m2.5:free',
-       'nemotron-3-super': 'minimax/minimax-m2.5:free'
-     };
+      // Define model mappings for testing mode
+      // Using minimax/minimax-m2.5:free as requested instead of llama models
+      // Using deepseek-ai/deepseek-v3.2 for tasks where it excels (reasoning, coding, etc.)
+      // Avoiding step flash models completely as requested
+      const TESTING_MODE_MAPPINGS = {
+        // Use minimax for most tasks as second main model
+        'default': 'minimax/minimax-m2.5:free',
+        // Use deepseek for tasks where it excels (reasoning, coding, etc.)
+        'gpt-5.4-pro': 'deepseek-ai/deepseek-v3.2',
+        'claude-opus-4.6': 'deepseek-ai/deepseek-v3.2',
+        // For hunter-alpha tasks (main model as its more smarter)
+        'grok-4.2': 'openrouter/hunter-alpha',
+        'gemini-3.1-pro': 'openrouter/hunter-alpha',
+        // Avoid step flash models completely - use minimax instead
+        'step-flash': 'minimax/minimax-m2.5:free',
+        'nemotron-3-super': 'minimax/minimax-m2.5:free'
+      };
      
      // Get the model to use for this internal model ID
      const modelToUse = TESTING_MODE_MAPPINGS[modelId] || TESTING_MODE_MAPPINGS['default'];

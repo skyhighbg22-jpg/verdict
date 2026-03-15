@@ -60,14 +60,14 @@ export const validateEnvironment = () => {
 
   result.availableProviders = availableProviders;
 
-  // If testing mode, only Groq is required
+  // If testing mode, only OpenRouter is required (for free models)
   if (testingMode) {
-    const hasGroq = availableProviders.some(p => p.name === 'Groq');
-    if (!hasGroq) {
+    const hasOpenRouter = availableProviders.some(p => p.name === 'OpenRouter');
+    if (!hasOpenRouter) {
       result.isValid = false;
-      result.errors.push('Testing mode requires VITE_GROQ_API_KEY to be set');
+      result.errors.push('Testing mode requires VITE_OPENROUTER_API_KEY to be set for free models');
     } else {
-      result.warnings.push('Testing mode is enabled: All requests will route through Groq');
+      result.warnings.push('Testing mode is enabled: All requests will route through OpenRouter with free models');
     }
   } else {
     // Normal mode: at least one provider required
