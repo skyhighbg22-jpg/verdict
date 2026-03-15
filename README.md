@@ -55,8 +55,9 @@ npm run dev
 
 ### Testing Mode
 
-Set `VITE_TESTING_MODE=true` to route all requests through Groq only:
-- Single API key required (Groq)
+Set `VITE_TESTING_MODE=true` to route all requests through OpenRouter with free models:
+- Single API key required (OpenRouter)
+- Uses free models including minimax/minimax-m2.5:free and deepseek-ai/deepseek-v3.2
 - Faster development iteration
 - Simplified debugging
 - Reduced API costs

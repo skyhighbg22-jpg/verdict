@@ -38,10 +38,11 @@ npm run dev
 
 ### Testing Mode
 
-**Testing Mode** (`VITE_TESTING_MODE=true`) routes ALL API requests through Groq only, ignoring other providers.
+**Testing Mode** (`VITE_TESTING_MODE=true`) routes ALL API requests through OpenRouter with free models, ignoring other providers.
 
 **Benefits:**
-- Only need one API key (Groq)
+- Only need one API key (OpenRouter)
+- Uses free models including minimax/minimax-m2.5:free and deepseek-ai/deepseek-v3.2
 - Faster development iteration
 - Simplified debugging
 - Reduced API costs
@@ -57,12 +58,12 @@ npm run dev
 
 | Model ID | Primary Provider | Fallback Chain |
 |----------|----------------|----------------|
-| `gpt-5.4-pro` | OpenAI → Gemini | Bytez → Groq → OpenRouter → NVIDIA |
-| `grok-4.2` | Groq | OpenRouter → Bytez → OpenAI → NVIDIA |
-| `gemini-3.1-pro` | Google (Gemini) | OpenAI → Bytez → OpenRouter → NVIDIA |
-| `claude-opus-4.6` | OpenRouter | Bytez → OpenAI → Groq → NVIDIA |
-| `step-flash` | NVIDIA | OpenRouter → Groq |
-| `nemotron-3-super` | NVIDIA | OpenRouter → Groq |
+| `gpt-5.4-pro` | OpenRouter | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez |
+| `grok-4.2` | OpenRouter | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez |
+| `gemini-3.1-pro` | OpenRouter | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez |
+| `claude-opus-4.6` | OpenRouter | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez |
+| `step-flash` | OpenRouter | NVIDIA → Groq |
+| `nemotron-3-super` | OpenRouter | NVIDIA → Groq |
 
 **Benefits:**
 - Optimal model selection for each task

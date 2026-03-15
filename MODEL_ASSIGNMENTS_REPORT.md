@@ -42,27 +42,28 @@ This document details the model assignments in the VERDICT architecture, includi
 ## Special Operating Modes
 
 ### Testing Mode
-**Purpose:** Simplified deployment and testing with minimal configuration
+**Purpose:** Simplified deployment and testing with minimal configuration using free models
 **Activation:** Set `VITE_TESTING_MODE=true` environment variable
 **Model Usage:**
-- **Primary Model:** Groq API (replacing all external model APIs)
+- **Primary Model:** OpenRouter API with free models (replacing all external model APIs)
 - **Specific Assignments:**
-  - TDS Analysis: Groq (llama3-8b-8192 or similar)
-  - GDE: Groq (llama3-8b-8192)
-  - MIRA Calibration: Groq (llama3-8b-8192)
-  - Planning Branches: Groq (llama3-8b-8192)
-  - Research: Groq (llama3-8b-8192)
-  - Causal Validation: Groq (llama3-8b-8192)
-  - Skeptic Agent: Groq (llama3-8b-8192)
-  - Advisory Layer: Groq (llama3-8b-8192)
-  - Implementation: Groq (llama3-8b-8192)
-  - Self-Critique: Groq (llama3-8b-8192)
-  - Pipeline Analysis: Groq (llama3-8b-8192)
-  - Jury Evaluation: Groq (llama3-8b-8192)
-  - Anchor Reconciliation: Groq (llama3-8b-8192)
+  - TDS Analysis: OpenRouter (minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2)
+  - GDE: OpenRouter (minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2)
+  - MIRA Calibration: OpenRouter (minimax/minimax-m2.5:free)
+  - Planning Branches: OpenRouter (minimax/minimax-m2.5:free)
+  - Research: OpenRouter (minimax/minimax-m2.5:free)
+  - Causal Validation: OpenRouter (minimax/minimax-m2.5:free)
+  - Skeptic Agent: OpenRouter (minimax/minimax-m2.5:free)
+  - Advisory Layer: OpenRouter (minimax/minimax-m2.5:free)
+  - Implementation: OpenRouter (minimax/minimax-m2.5:free)
+  - Self-Critique: OpenRouter (minimax/minimax-m2.5:free)
+  - Pipeline Analysis: OpenRouter (minimax/minimax-m2.5:free)
+  - Jury Evaluation: OpenRouter (minimax/minimax-m2.5:free)
+  - Anchor Reconciliation: OpenRouter (minimax/minimax-m2.5:free)
 
 **Benefits:**
-- Single API key required (Groq)
+- Single API key required (OpenRouter)
+- Uses free models including minimax/minimax-m2.5:free and deepseek-ai/deepseek-v3.2
 - Reduced complexity for development/testing
 - Faster iteration cycles
 - Preserves all architectural patterns and workflows

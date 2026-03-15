@@ -30,8 +30,8 @@ This document summarizes the deployment-ready environment configuration implemen
 
 #### `src/api/apiRouter.js`
 - Central routing logic for model requests
-- Implements testing mode (all requests → Groq)
-- Normal mode with provider fallback chain
+- Implements testing mode (all requests → OpenRouter with free models)
+- Normal mode with provider fallback chain (preferring OpenRouter free models)
 - Retry logic with exponential backoff
 - Functions:
   - `routeRequest(modelId, input)` - Main routing
@@ -45,11 +45,13 @@ This document summarizes the deployment-ready environment configuration implemen
 - OpenAI API integration
 - Maps: gpt-5.4-pro → gpt-4o
 - Uses standard OpenAI chat completions endpoint
+- Used as fallback when OpenRouter/NVIDIA fail
 
 #### `src/api/providers/geminiProvider.js`
 - Google Gemini API integration
 - Maps: gemini-3.1-pro → gemini-1.5-pro
 - Uses Gemini generateContent endpoint
+- Used as fallback when OpenRouter/NVIDIA fail
 
 #### `src/api/providers/groqProvider.js`
 - Groq API integration (fast inference)
@@ -57,25 +59,28 @@ This document summarizes the deployment-ready environment configuration implemen
 - Maps: grok-4.2 → mixtral-8x7b-32768
 - Maps: step-flash → step-flash
 - Maps: nemotron-3-super → nemotron-3-super
-- Used in testing mode
+- Used as fallback when OpenRouter/NVIDIA fail
 
 #### `src/api/providers/bytezProvider.js`
 - Bytez API integration (refactored from original)
 - Maps internal IDs to Bytez models
 - Maintains compatibility with original bytezClient interface
+- Used as last fallback option
 
 #### `src/api/providers/openrouterProvider.js`
 - OpenRouter API integration (multi-provider)
-- Maps: claude-opus-4.6 → anthropic/claude-3-opus
-- Final fallback option
+- Uses free models: nvidia/nemotron-3-super-120b-a12b:free, openrouter/hunter-alpha, minimax/minimax-m2.5:free, deepseek-ai/deepseek-v3.2
+- Primary provider for most models in normal mode
+- Used for testing mode with specific model mappings
 
 #### `src/api/providers/nvidiaProvider.js`
 - NVIDIA API integration (step flash and nemotron 3 super)
+- Used as fallback when OpenRouter fails for step-flash and nemotron-3-super models
 - Maps: gpt-5.4-pro → nemotron-3-super
 - Maps: grok-4.2 → step-flash
 - Maps: gemini-3.1-pro → nemotron-3-super
 - Maps: claude-opus-4.6 → nemotron-3-super
-- Used for step-flash and nemotron-3-super models
+- Used for step-flash and nemotron-3-super models when OpenRouter fails
 
 #### `src/api/providers/index.js`
 - Exports all providers
@@ -171,12 +176,12 @@ This document summarizes the deployment-ready environment configuration implemen
 
 | Internal Model ID | Primary Providers (in order) | Fallback Chain | Testing Mode |
 |------------------|---------------------------|----------------|---------------|
-| `gpt-5.4-pro` | OpenAI, Gemini | Bytez, Groq, OpenRouter, NVIDIA | → Groq |
-| `grok-4.2` | Groq | OpenRouter, Bytez, OpenAI, NVIDIA | → Groq |
-| `gemini-3.1-pro` | Gemini | OpenAI, Bytez, OpenRouter, NVIDIA | → Groq |
-| `claude-opus-4.6` | OpenRouter | Bytez, OpenAI, Groq, NVIDIA | → Groq |
-| `step-flash` | NVIDIA | OpenRouter, Groq | → Groq |
-| `nemotron-3-super` | NVIDIA | OpenRouter, Groq | → Groq |
+| `gpt-5.4-pro` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
+| `grok-4.2` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
+| `gemini-3.1-pro` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
+| `claude-opus-4.6` | OpenRouter (free models) | NVIDIA → Groq → OpenAI → Google (Gemini) → Bytez | → OpenRouter (free models: minimax/minimax-m2.5:free or deepseek-ai/deepseek-v3.2) |
+| `step-flash` | OpenRouter (free models: nvidia/nemotron-3-super-120b-a12b:free) | NVIDIA → Groq | → OpenRouter (free models: minimax/minimax-m2.5:free) |
+| `nemotron-3-super` | OpenRouter (free models: nvidia/nemotron-3-super-120b-a12b:free) | NVIDIA → Groq | → OpenRouter (free models: minimax/minimax-m2.5:free) |
 
 ## Key Features
 

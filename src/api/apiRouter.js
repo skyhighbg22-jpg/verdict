@@ -23,28 +23,28 @@ const config = envValidation.config;
  */
 const MODEL_ROUTING = {
   'gpt-5.4-pro': {
-    primary: ['OpenAI', 'Google (Gemini)'], // Try OpenAI first, then Gemini
-    fallbacks: ['Bytez', 'Groq', 'OpenRouter', 'NVIDIA']
+    primary: ['OpenRouter'], // Use free models from OpenRouter for most tasks
+    fallbacks: ['NVIDIA', 'Groq', 'OpenAI', 'Google (Gemini)', 'Bytez']
   },
   'grok-4.2': {
-    primary: ['Groq'], // Groq is best for adversarial validation
-    fallbacks: ['OpenRouter', 'Bytez', 'OpenAI', 'NVIDIA']
+    primary: ['OpenRouter'], // Use free models from OpenRouter for most tasks
+    fallbacks: ['NVIDIA', 'Groq', 'OpenAI', 'Google (Gemini)', 'Bytez']
   },
   'gemini-3.1-pro': {
-    primary: ['Google (Gemini)'],
-    fallbacks: ['OpenAI', 'Bytez', 'OpenRouter', 'NVIDIA']
+    primary: ['OpenRouter'], // Use free models from OpenRouter for most tasks
+    fallbacks: ['NVIDIA', 'Groq', 'OpenAI', 'Google (Gemini)', 'Bytez']
   },
   'claude-opus-4.6': {
-    primary: ['OpenRouter'], // OpenRouter has Claude
-    fallbacks: ['Bytez', 'OpenAI', 'Groq', 'NVIDIA']
+    primary: ['OpenRouter'], // Use free models from OpenRouter for most tasks
+    fallbacks: ['NVIDIA', 'Groq', 'OpenAI', 'Google (Gemini)', 'Bytez']
   },
   'step-flash': {
-    primary: ['NVIDIA'], // NVIDIA has step flash
-    fallbacks: ['OpenRouter', 'Groq']
+    primary: ['OpenRouter'], // Prefer free models from OpenRouter
+    fallbacks: ['NVIDIA', 'Groq'] // Only use NVIDIA for bigger tasks if OpenRouter fails
   },
   'nemotron-3-super': {
-    primary: ['NVIDIA'], // NVIDIA has nemotron 3 super
-    fallbacks: ['OpenRouter', 'Groq']
+    primary: ['OpenRouter'], // Prefer free models from OpenRouter
+    fallbacks: ['NVIDIA', 'Groq'] // Only use NVIDIA for bigger tasks if OpenRouter fails
   }
 };
 
@@ -116,18 +116,42 @@ export async function routeRequest(modelId, input) {
   const allProviders = [...routing.primary, ...routing.fallbacks];
   let lastError = null;
 
-  // If testing mode, only use Groq
-  if (envValidation.testingMode) {
-    if (config.logProviderUsage) {
-      console.log(`[APIRouter] 🧪 Testing Mode: Routing ${modelId} to Groq`);
-    }
-    
-    try {
-      return await attemptInference(groqProvider, modelId, input);
-    } catch (error) {
-      throw new Error(`Testing mode error: ${error.message}. Please check VITE_GROQ_API_KEY.`);
-    }
-  }
+// If testing mode, use OpenRouter with specific free models
+   if (envValidation.testingMode) {
+     if (config.logProviderUsage) {
+       console.log(`[APIRouter] 🧪 Testing Mode: Routing ${modelId} to OpenRouter (free models)`);
+     }
+     
+     // Define model mappings for testing mode
+     const TESTING_MODE_MAPPINGS = {
+       // Use minimax for most tasks
+       'default': 'minimax/minimax-m2.5:free',
+       // Use deepseek for tasks where it excels (reasoning, coding, etc.)
+       'gpt-5.4-pro': 'deepseek-ai/deepseek-v3.2',
+       'claude-opus-4.6': 'deepseek-ai/deepseek-v3.2',
+       // Avoid step flash models as requested
+       'step-flash': 'minimax/minimax-m2.5:free',
+       'nemotron-3-super': 'minimax/minimax-m2.5:free'
+     };
+     
+     // Get the model to use for this internal model ID
+     const modelToUse = TESTING_MODE_MAPPINGS[modelId] || TESTING_MODE_MAPPINGS['default'];
+     
+     try {
+       // Temporarily override the openrouter provider's model mapping
+       const originalGetModelId = openrouterProvider.getModelId;
+       openrouterProvider.getModelId = () => modelToUse;
+       
+       const result = await attemptInference(openrouterProvider, modelId, input);
+       
+       // Restore original function
+       openrouterProvider.getModelId = originalGetModelId;
+       
+       return result;
+     } catch (error) {
+       throw new Error(`Testing mode error: ${error.message}. Please check VITE_OPENROUTER_API_KEY.`);
+     }
+   }
 
   // Try each provider in order
   for (const providerName of allProviders) {

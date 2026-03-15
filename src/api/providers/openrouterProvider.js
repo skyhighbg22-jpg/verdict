@@ -10,15 +10,16 @@ class OpenRouterProvider {
     this.name = 'OpenRouter';
     this.baseUrl = 'https://openrouter.ai/api/v1';
     
-     // Model mappings (OpenRouter uses provider/model format)
-     this.modelMappings = {
-       'gpt-5.4-pro': 'openai/gpt-4o',
-       'gemini-3.1-pro': 'google/gemini-pro-1.5',
-       'grok-4.2': 'x-ai/grok-beta',
-       'claude-opus-4.6': 'anthropic/claude-3-opus',
-       'step-flash': 'step-ai/step-flash',
-       'nemotron-3-super': 'nvidia/nemotron-3-super'
-     };
+      // Model mappings (OpenRouter uses provider/model format)
+      // Using free models as requested
+      this.modelMappings = {
+        'gpt-5.4-pro': 'openrouter/hunter-alpha', // main model, more smarter
+        'gemini-3.1-pro': 'openrouter/hunter-alpha', // main model, more smarter
+        'grok-4.2': 'openrouter/hunter-alpha', // main model, more smarter
+        'claude-opus-4.6': 'openrouter/hunter-alpha', // main model, more smarter
+        'step-flash': 'nvidia/nemotron-3-super-120b-a12b:free', // using free nemotron super
+        'nemotron-3-super': 'nvidia/nemotron-3-super-120b-a12b:free' // using free nemotron super
+      };
   }
 
   /**
