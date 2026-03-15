@@ -1,0 +1,3 @@
+This file was updated on Sun Mar 15 2026 when security vulnerabilities were fixed:
+- vite.config.js: Changed loadEnv to only expose VITE_ prefixed env variables
+- package.json: Updated vite from 5.4.x to 8.0.0 to fix esbuild vulnerability

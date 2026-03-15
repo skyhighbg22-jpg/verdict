@@ -1,0 +1,33 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "installCommand": "npm install",
+  "devCommand": "npm run dev",
+  "env": {
+    "VITE_TESTING_MODE": {
+      "description": "When true, all requests route through Groq only",
+      "value": "false"
+    },
+    "VITE_ENABLE_FALLBACK": {
+      "description": "Enable provider fallback on errors",
+      "value": "true"
+    },
+    "VITE_MAX_RETRIES": {
+      "description": "Maximum retry attempts per provider",
+      "value": "3"
+    },
+    "VITE_REQUEST_TIMEOUT": {
+      "description": "Request timeout in milliseconds",
+      "value": "30000"
+    },
+    "VITE_LOG_LEVEL": {
+      "description": "Logging level (debug, info, warn, error)",
+      "value": "info"
+    },
+    "VITE_LOG_PROVIDER_USAGE": {
+      "description": "Log which provider handles each request",
+      "value": "true"
+    }
+  }
+}
