@@ -3,26 +3,8 @@
  * Comprehensive TypeScript-style type definitions for all VERDICT components
  */
 
-// ============================================================================
-// Core Pipeline Types
-// ============================================================================
-
-export const PIPELINE_STATUS = {
-  IDLE: 'idle',
-  RUNNING: 'running',
-  PAUSED: 'paused',
-  PENDING_APPROVAL: 'pending_approval',
-  COMPLETED: 'completed',
-  FAILED: 'failed'
-};
-
-export const PHASES = {
-  REFINING: 'Refining',
-  PLANNING: 'Planning',
-  RESEARCH: 'Research',
-  IMPLEMENTATION: 'Implementation',
-  CLOSE_OUT: 'Close-Out'
-};
+// Re-export from centralized types to avoid duplication
+export { PHASES, ANCHOR_VERSIONS, PIPELINE_STATUS } from '../../types/pipeline.js';
 
 // ============================================================================
 // TDS (Task Difficulty Score) Types
@@ -387,7 +369,7 @@ export const STATE_LAYERS = {
 // Anchor & Reconciliation Types
 // ============================================================================
 
-export const ANCHOR_VERSIONS = ['v0', 'v1', 'v2', 'v3'];
+// ANCHOR_VERSIONS is re-exported from pipeline.js above
 
 /**
  * @typedef {Object} Anchor

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { executePipeline, PIPELINE_STATUS, PHASE_TRANSITIONS, getNextPhase } from '../services/pipelineEngine';
+import { PHASES, ANCHOR_VERSIONS, PIPELINE_STATUS } from '../types/pipeline.js';
+import { executePipeline, PHASE_TRANSITIONS, getNextPhase } from '../services/pipelineEngine';
 import { runMiraCalibration } from '../services/miraEngine';
 import { runTDSAnalysis, DEFAULT_TDS_SCORES } from '../services/tdsRouter';
 import { statePersistence } from '../services/state/statePersistence';
@@ -7,15 +8,8 @@ import { auditLogService, AUDIT_EVENTS } from '../services/auditLog';
 
 const PipelineContext = createContext();
 
-export const PHASES = {
-  REFINING: 'Refining',
-  PLANNING: 'Planning',
-  RESEARCH: 'Research',
-  IMPLEMENTATION: 'Implementation',
-  CLOSE_OUT: 'Close-Out',
-};
-
-export const ANCHOR_VERSIONS = ['v0', 'v1', 'v2', 'v3'];
+// Re-export from types/pipeline.js for backward compatibility
+export { PHASES, ANCHOR_VERSIONS, PIPELINE_STATUS } from '../types/pipeline.js';
 
 /**
  * Initial state for the pipeline

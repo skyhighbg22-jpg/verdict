@@ -241,6 +241,5 @@ export default {
   routeRequest,
   getModelRouting,
   getEnvironmentStatus,
-  revalidateEnvironment,
-  routerConfig
+  revalidateEnvironment
 };

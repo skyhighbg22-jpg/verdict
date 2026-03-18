@@ -3,23 +3,11 @@
  * Orchestrates the 5 phases of the VERDICT pipeline
  */
 
-import { PHASES } from '../context/PipelineContext';
+import { PHASES, PIPELINE_STATUS } from '../types/pipeline.js';
 import { runMiraCalibration, calculateCalibrationScore } from './miraEngine';
 import { runTDSAnalysis, determineRouting } from './tdsRouter';
 import { runGoalDecomposition, updateTaskStatus, TASK_STATUS } from './gde';
 import { runSkepticValidation, analyzeCausalChain, detectFallacies, compareWithAdversarial } from './causalValidator';
-
-/**
- * Pipeline status enum
- */
-export const PIPELINE_STATUS = {
-  IDLE: 'idle',
-  RUNNING: 'running',
-  PAUSED: 'paused',
-  PENDING_APPROVAL: 'pending_approval',
-  COMPLETED: 'completed',
-  FAILED: 'failed'
-};
 
 /**
  * Phase transition events

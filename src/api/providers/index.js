@@ -9,7 +9,7 @@ import GroqProvider from './groqProvider.js';
 import BytezProvider from './bytezProvider.js';
 import OpenRouterProvider from './openrouterProvider.js';
 import NVIDIAProvider from './nvidiaProvider.js';
-import FreeModeProvider from './freeModeProvider.js';
+import { FreeModeProvider, freeModeProvider } from './freeModeProvider.js';
 
 export {
   OpenAIProvider,
@@ -27,7 +27,7 @@ export const groqProvider = new GroqProvider();
 export const bytezProvider = new BytezProvider();
 export const openrouterProvider = new OpenRouterProvider();
 export const nvidiaProvider = new NVIDIAProvider();
-export const freeModeProvider = new FreeModeProvider();
+export { freeModeProvider };
 
 // Provider registry
 export const providers = {
@@ -50,7 +50,7 @@ export const getProvider = (name) => {
     'NVIDIA': nvidiaProvider,
     'FreeMode': freeModeProvider
   };
-  
+
   return providerMap[name] || null;
 };
 

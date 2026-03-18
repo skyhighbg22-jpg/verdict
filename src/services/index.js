@@ -114,8 +114,8 @@ export { default as modelClient, modelClient as verdictModelClient, MODEL_CONFIG
   from './types/modelClient.js';
 
 // Pipeline Context
-export { default as PipelineContext, PipelineProvider, usePipeline, PHASES, ANCHOR_VERSIONS } 
-  from '../context/PipelineContext.jsx';
+export { default as PipelineContext, PipelineProvider, usePipeline, ANCHOR_VERSIONS }
+from '../context/PipelineContext.jsx';
 
 // Bytez Client (re-export for convenience)
 export { default as bytezClient } 
