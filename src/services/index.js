@@ -120,3 +120,51 @@ export { default as PipelineContext, PipelineProvider, usePipeline, PHASES, ANCH
 // Bytez Client (re-export for convenience)
 export { default as bytezClient } 
   from '../api/bytezClient.js';
+
+// Pre-Flight Check Service
+export { default as preFlightCheck, PREFLIGHT_CONFIG, PREFLIGHT_CHECKS, runAllChecks, runCriticalChecks, runQuickCheck } 
+  from './preflight/preflightCheck.js';
+
+// Free Mode Provider (for community access)
+export { FREE_MODE_CONFIG, freeModeProvider, FREE_MODE_ROLES }
+  from '../api/providers/freeModeProvider.js';
+
+// Delta Check Service (Research phase - live findings vs expected)
+export { deltaCheckService, runDeltaCheck, quickDeltaCheck, DELTA_CHECK_CONFIG, DELTA_TYPES, DELTA_SEVERITY }
+  from './verification/deltaCheck.js';
+
+// Async Batch Processing (Research + Implementation parallel execution)
+export { asyncBatchProcessor, processPhaseBatch, getBatchStatus, getCostStats, ASYNC_BATCH_CONFIG, BATCH_STATUS, PHASE_BATCHES }
+  from './state/asyncBatchProcessing.js';
+
+// GEL Schema Validation (entry ingestion validation)
+export { gelSchemaValidator, validateGELEntry, validateGELBatch, getValidationStats, GEL_SCHEMA_CONFIG, GEL_SCHEMA_TYPES, VALIDATION_SEVERITY }
+  from './verification/gelSchemaValidation.js';
+
+// Cost Tracking (real-time cost monitoring)
+export { costTracker, startSession, endSession, trackRequest, trackSavings, getGlobalStats, getProviderBreakdown, getModelBreakdown, getPhaseBreakdown, exportCostReport, COST_CONFIG }
+  from './state/costTracking.js';
+
+// SONA Self-Learning (session-over-session routing improvement)
+export { sonaService, recordSession, evaluateOutcome, getOptimalModel, getModelScores, getAllModelScores, exportSONAKnowledge, importSONAKnowledge, SONA_CONFIG, PATTERN_TYPES, OUTCOME_TYPES }
+  from './planning/sonaSelfLearning.js';
+
+// TDS GEL Cache (zero-cost exact match returns)
+export { tdsGELCache, TDS_CACHE_CONFIG }
+  from './state/tdsCache.js';
+
+// Prompt Caching (90% input token savings)
+export { promptCache, getCachedPrompt, buildPrompt, getCacheStats, PROMPT_CACHE_CONFIG, SYSTEM_PROMPTS, GEL_SCHEMA_TEMPLATE }
+  from './state/promptCache.js';
+
+// Structured Output Formatter (5-15% token savings)
+export { structuredOutputFormatter, formatResponse, getOutputSuffix, OUTPUT_FORMATS }
+  from './state/structuredOutput.js';
+
+// MIRA Dynamic Jury Substitution (model swapping on probe failure)
+export { jurySubstitutionManager, runJuryProbe, runFullJuryProbe, getJuryComposition, JURY_SUBSTITUTION_CONFIG }
+  from './miraDynamicJury.js';
+
+// Skeptic Grounding (dedicated live X cross-reference)
+export { skepticGrounding, groundClaim, groundBatch, getGroundingStats, SKEPTIC_GROUNDING_CONFIG, GROUNDING_STATUS }
+  from './verification/skepticGrounding.js';

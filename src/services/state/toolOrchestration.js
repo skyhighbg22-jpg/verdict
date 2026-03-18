@@ -148,8 +148,55 @@ class CodeExecutionTool {
   }
 
   async executePython(code) {
-    // In production, use Pyodide or similar
-    return { result: 'Python execution simulated', output: code.substring(0, 100) };
+    // Try Pyodide if available in environment
+    if (typeof window !== 'undefined' && window.pyodide) {
+      try {
+        const result = await window.pyodide.runPythonAsync(code);
+        return { result, type: typeof result, output: String(result) };
+      } catch (e) {
+        return { error: e.message };
+      }
+    }
+    
+    // Fallback: Basic Python syntax simulation
+    const lines = code.split('\n');
+    const outputs = [];
+    const variables = {};
+    
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      
+      // Simple variable assignment
+      const assignMatch = trimmed.match(/^(\w+)\s*=\s*(.+)$/);
+      if (assignMatch) {
+        const [, varName, value] = assignMatch;
+        try {
+          variables[varName] = eval(value);
+        } catch {
+          variables[varName] = value;
+        }
+        continue;
+      }
+      
+      // Print statement simulation
+      const printMatch = trimmed.match(/^print\((.+)\)$/);
+      if (printMatch) {
+        const expr = printMatch[1];
+        try {
+          outputs.push(eval(expr));
+        } catch {
+          outputs.push(`[${expr}]`);
+        }
+      }
+    }
+    
+    return { 
+      result: outputs.length > 0 ? outputs.join('\n') : 'Executed',
+      variables,
+      output: outputs.join('\n'),
+      type: 'simulated'
+    };
   }
 
   async executeBash(command) {
@@ -266,20 +313,65 @@ class APICallTool {
 
 /**
  * Database Query Tool
+ * Uses IndexedDB for persistent storage in browser environment
  */
 class DatabaseQueryTool {
   constructor() {
-    // Simulated database
+    this.dbName = 'verdict_db';
+    this.dbVersion = 1;
+    this.db = null;
     this.data = new Map();
+    this.initPromise = this.initDatabase();
+  }
+
+  async initDatabase() {
+    if (typeof window === 'undefined' || !window.indexedDB) {
+      console.warn('[DB] IndexedDB not available, using in-memory fallback');
+      return;
+    }
+
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(this.dbName, this.dbVersion);
+
+      request.onerror = () => {
+        console.warn('[DB] IndexedDB error, using in-memory fallback');
+        resolve();
+      };
+
+      request.onsuccess = (event) => {
+        this.db = event.target.result;
+        console.log('[DB] IndexedDB initialized');
+        resolve();
+      };
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        
+        // Create stores
+        if (!db.objectStoreNames.contains('tasks')) {
+          db.createObjectStore('tasks', { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains('facts')) {
+          db.createObjectStore('facts', { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains('checkpoints')) {
+          db.createObjectStore('checkpoints', { keyPath: 'id', autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains('metadata')) {
+          db.createObjectStore('metadata', { keyPath: 'key' });
+        }
+      };
+    });
+  }
+
+  async ensureReady() {
+    await this.initPromise;
   }
 
   async query(sql, params = {}) {
     const startTime = Date.now();
+    await this.ensureReady();
 
-    // In production, connect to actual database
-    // This is a simulation
-    
-    // Basic SQL parsing (for simulation only)
     const isSelect = sql.trim().toLowerCase().startsWith('select');
     
     if (!isSelect) {
@@ -290,25 +382,194 @@ class DatabaseQueryTool {
       };
     }
 
-    // Simulate query result
-    return {
-      ...createToolResult('database_query', TOOL_STATUS.SUCCESS, {
-        rows: [],
-        affectedRows: 0,
-        query: sql
-      }),
-      duration: Date.now() - startTime
-    };
+    // Parse simple SELECT queries
+    const tableMatch = sql.match(/from\s+(\w+)/i);
+    const table = tableMatch ? tableMatch[1].toLowerCase() : null;
+
+    if (!table) {
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.FAILED, null, 
+          'Invalid SELECT query'),
+        duration: Date.now() - startTime
+      };
+    }
+
+    try {
+      if (this.db) {
+        const result = await this.queryIndexedDB(table, sql, params);
+        return {
+          ...createToolResult('database_query', TOOL_STATUS.SUCCESS, {
+            rows: result,
+            affectedRows: result.length,
+            query: sql,
+            source: 'indexeddb'
+          }),
+          duration: Date.now() - startTime
+        };
+      } else {
+        // Fallback to in-memory
+        const rows = this.data.get(table) || [];
+        return {
+          ...createToolResult('database_query', TOOL_STATUS.SUCCESS, {
+            rows,
+            affectedRows: rows.length,
+            query: sql,
+            source: 'memory'
+          }),
+          duration: Date.now() - startTime
+        };
+      }
+    } catch (error) {
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.FAILED, null, error.message),
+        duration: Date.now() - startTime
+      };
+    }
+  }
+
+  async queryIndexedDB(table, sql, params) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction([table], 'readonly');
+      const store = transaction.objectStore(table);
+      const request = store.getAll();
+
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => reject(request.error);
+    });
   }
 
   async insert(table, data) {
-    // Simulate insert
-    if (!this.data.has(table)) {
-      this.data.set(table, []);
+    const startTime = Date.now();
+    await this.ensureReady();
+
+    const record = { ...data, id: data.id || `row_${Date.now()}`, createdAt: new Date().toISOString() };
+
+    try {
+      if (this.db) {
+        await this.insertIndexedDB(table, record);
+      } else {
+        if (!this.data.has(table)) {
+          this.data.set(table, []);
+        }
+        this.data.get(table).push(record);
+      }
+
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.SUCCESS, {
+          rows: [record],
+          affectedRows: 1,
+          operation: 'insert',
+          source: this.db ? 'indexeddb' : 'memory'
+        }),
+        duration: Date.now() - startTime
+      };
+    } catch (error) {
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.FAILED, null, error.message),
+        duration: Date.now() - startTime
+      };
     }
-    this.data.get(table).push({ ...data, id: Date.now() });
-    
-    return { success: true, id: Date.now() };
+  }
+
+  async insertIndexedDB(table, record) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction([table], 'readwrite');
+      const store = transaction.objectStore(table);
+      const request = store.add(record);
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async update(table, id, data) {
+    const startTime = Date.now();
+    await this.ensureReady();
+
+    const record = { ...data, id, updatedAt: new Date().toISOString() };
+
+    try {
+      if (this.db) {
+        await this.updateIndexedDB(table, record);
+      } else {
+        const rows = this.data.get(table) || [];
+        const index = rows.findIndex(r => r.id === id);
+        if (index >= 0) {
+          rows[index] = record;
+        }
+      }
+
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.SUCCESS, {
+          rows: [record],
+          affectedRows: 1,
+          operation: 'update'
+        }),
+        duration: Date.now() - startTime
+      };
+    } catch (error) {
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.FAILED, null, error.message),
+        duration: Date.now() - startTime
+      };
+    }
+  }
+
+  async updateIndexedDB(table, record) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction([table], 'readwrite');
+      const store = transaction.objectStore(table);
+      const request = store.put(record);
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  async delete(table, id) {
+    const startTime = Date.now();
+    await this.ensureReady();
+
+    try {
+      if (this.db) {
+        await this.deleteIndexedDB(table, id);
+      } else {
+        const rows = this.data.get(table) || [];
+        this.data.set(table, rows.filter(r => r.id !== id));
+      }
+
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.SUCCESS, {
+          affectedRows: 1,
+          operation: 'delete'
+        }),
+        duration: Date.now() - startTime
+      };
+    } catch (error) {
+      return {
+        ...createToolResult('database_query', TOOL_STATUS.FAILED, null, error.message),
+        duration: Date.now() - startTime
+      };
+    }
+  }
+
+  async deleteIndexedDB(table, id) {
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction([table], 'readwrite');
+      const store = transaction.objectStore(table);
+      const request = store.delete(id);
+
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error);
+    });
+  }
+
+  getDbStatus() {
+    return {
+      initialized: !!this.db,
+      inMemoryTables: Array.from(this.data.keys()),
+      storage: this.db ? 'IndexedDB' : 'in-memory'
+    };
   }
 }
 

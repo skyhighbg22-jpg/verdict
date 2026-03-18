@@ -20,11 +20,11 @@ const PhaseStepper = () => {
     <div className="w-full py-4 px-4">
       <div className="flex items-center justify-between relative">
         {/* Background Line */}
-        <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 -z-0" />
-        
+        <div className="absolute top-5 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-700 -z-0" />
+
         {/* Active Progress Line */}
-        <motion.div 
-          className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-0" 
+        <motion.div
+          className="absolute top-5 left-0 h-0.5 bg-blue-600 -z-0"
           initial={{ width: 0 }}
           animate={{ width: `${(activeIndex / (phases.length - 1)) * 100}%` }}
           transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -36,13 +36,13 @@ const PhaseStepper = () => {
 
           return (
             <div key={phase} className="flex flex-col items-center relative z-10">
-              <motion.button 
+              <motion.button
                 onClick={() => setActivePhase(phase)}
                 className={cn(
                   "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 outline-none",
-                  isCompleted ? "bg-blue-600 border-blue-600 text-white" : 
-                  isActive ? "bg-white border-blue-600 text-blue-600 shadow-md" : 
-                  "bg-white border-gray-300 text-gray-400 hover:border-gray-400"
+                  isCompleted ? "bg-blue-600 border-blue-600 text-white" :
+                  isActive ? "bg-white dark:bg-gray-800 border-blue-600 text-blue-600 shadow-md" :
+                  "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:border-gray-400 dark:hover:border-gray-500"
                 )}
                 whileHover={{ scale: isCompleted || isActive ? 1.1 : 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -61,10 +61,10 @@ const PhaseStepper = () => {
                   index + 1
                 )}
               </motion.button>
-              <motion.span 
+              <motion.span
                 className={cn(
                   "mt-2 text-[10px] sm:text-xs font-bold transition-all duration-300 uppercase tracking-tight",
-                  isActive ? "text-blue-600" : "text-gray-400"
+                  isActive ? "text-blue-600" : "text-gray-400 dark:text-gray-500"
                 )}
                 animate={isActive ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
               >

@@ -9,13 +9,15 @@ import GroqProvider from './groqProvider.js';
 import BytezProvider from './bytezProvider.js';
 import OpenRouterProvider from './openrouterProvider.js';
 import NVIDIAProvider from './nvidiaProvider.js';
+import FreeModeProvider from './freeModeProvider.js';
 
 export {
   OpenAIProvider,
   GeminiProvider,
   GroqProvider,
   BytezProvider,
-  OpenRouterProvider
+  OpenRouterProvider,
+  FreeModeProvider
 };
 
 // Provider instances (singletons)
@@ -25,6 +27,7 @@ export const groqProvider = new GroqProvider();
 export const bytezProvider = new BytezProvider();
 export const openrouterProvider = new OpenRouterProvider();
 export const nvidiaProvider = new NVIDIAProvider();
+export const freeModeProvider = new FreeModeProvider();
 
 // Provider registry
 export const providers = {
@@ -32,7 +35,8 @@ export const providers = {
   gemini: geminiProvider,
   groq: groqProvider,
   bytez: bytezProvider,
-  openrouter: openrouterProvider
+  openrouter: openrouterProvider,
+  freemode: freeModeProvider
 };
 
 // Get provider by name
@@ -43,7 +47,8 @@ export const getProvider = (name) => {
     'Groq': groqProvider,
     'Bytez': bytezProvider,
     'OpenRouter': openrouterProvider,
-    'NVIDIA': nvidiaProvider
+    'NVIDIA': nvidiaProvider,
+    'FreeMode': freeModeProvider
   };
   
   return providerMap[name] || null;

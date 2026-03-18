@@ -33,7 +33,7 @@ const PhaseView = () => {
       case PHASES.CLOSE_OUT:
         return <CloseOutView />;
       default:
-        return <div className="p-20 text-center text-gray-500">Select a phase to begin.</div>;
+        return <div className="p-20 text-center text-gray-500 dark:text-gray-400">Select a phase to begin.</div>;
     }
   };
 
@@ -45,20 +45,20 @@ const PhaseView = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl font-black text-gray-900 tracking-tight"
+            className="text-3xl font-black text-gray-900 dark:text-gray-100 tracking-tight"
           >
             {activePhase}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-gray-500 mt-1 font-medium"
+            className="text-gray-500 dark:text-gray-400 mt-1 font-medium"
           >
-            Pipeline version <span className="text-blue-600 font-bold">{anchorVersion.toUpperCase()}</span> is currently active.
+            Pipeline version <span className="text-blue-600 dark:text-blue-400 font-bold">{anchorVersion.toUpperCase()}</span> is currently active.
           </motion.p>
         </div>
         <motion.button
@@ -66,15 +66,15 @@ const PhaseView = () => {
           whileTap={{ scale: 0.98 }}
           onClick={handleRunPhase}
           disabled={isProcessing}
-          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-200/50 dark:shadow-blue-900/30 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Play size={18} fill="currentColor" />
           Run {activePhase}
         </motion.button>
       </div>
-      
-      <motion.div 
-        className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[500px]"
+
+      <motion.div
+        className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden min-h-[500px]"
         layout
       >
         <AnimatePresence mode="wait">

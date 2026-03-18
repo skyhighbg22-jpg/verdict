@@ -68,37 +68,37 @@ const severityConfig = {
   critical: {
     icon: AlertTriangle,
     color: 'red',
-    bgColor: 'bg-red-50',
-    borderColor: 'border-red-200',
-    iconBg: 'bg-red-100',
-    textColor: 'text-red-800',
+    bgColor: 'bg-red-50 dark:bg-red-900/30',
+    borderColor: 'border-red-200 dark:border-red-800',
+    iconBg: 'bg-red-100 dark:bg-red-900/50',
+    textColor: 'text-red-800 dark:text-red-300',
     buttonColor: 'red'
   },
   high: {
     icon: AlertTriangle,
     color: 'orange',
-    bgColor: 'bg-orange-50',
-    borderColor: 'border-orange-200',
-    iconBg: 'bg-orange-100',
-    textColor: 'text-orange-800',
+    bgColor: 'bg-orange-50 dark:bg-orange-900/30',
+    borderColor: 'border-orange-200 dark:border-orange-800',
+    iconBg: 'bg-orange-100 dark:bg-orange-900/50',
+    textColor: 'text-orange-800 dark:text-orange-300',
     buttonColor: 'orange'
   },
   medium: {
     icon: Shield,
     color: 'yellow',
-    bgColor: 'bg-yellow-50',
-    borderColor: 'border-yellow-200',
-    iconBg: 'bg-yellow-100',
-    textColor: 'text-yellow-800',
+    bgColor: 'bg-yellow-50 dark:bg-yellow-900/30',
+    borderColor: 'border-yellow-200 dark:border-yellow-800',
+    iconBg: 'bg-yellow-100 dark:bg-yellow-900/50',
+    textColor: 'text-yellow-800 dark:text-yellow-300',
     buttonColor: 'yellow'
   },
   low: {
     icon: CheckCircle,
     color: 'green',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200',
-    iconBg: 'bg-green-100',
-    textColor: 'text-green-800',
+    bgColor: 'bg-green-50 dark:bg-green-900/30',
+    borderColor: 'border-green-200 dark:border-green-800',
+    iconBg: 'bg-green-100 dark:bg-green-900/50',
+    textColor: 'text-green-800 dark:text-green-300',
     buttonColor: 'green'
   }
 };
@@ -106,14 +106,14 @@ const severityConfig = {
 /**
  * Main Approval Gate Component
  */
-const ApprovalGate = ({ 
-  isOpen, 
-  onApprove, 
+const ApprovalGate = ({
+  isOpen,
+  onApprove,
   onReject,
   onHold,
   approvalType,
   details = {},
-  isLoading = false 
+  isLoading = false
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
@@ -145,18 +145,18 @@ const ApprovalGate = ({
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
-          <motion.div 
+          <motion.div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => {}}
           />
-          
+
           {/* Modal */}
-          <motion.div 
+          <motion.div
             className={cn(
-              "relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden"
+              "relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden"
             )}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -164,14 +164,14 @@ const ApprovalGate = ({
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
             {/* Header */}
-            <motion.div 
+            <motion.div
               className={cn("p-6 border-b", config.bgColor, config.borderColor)}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
             >
               <div className="flex items-center gap-4">
-                <motion.div 
+                <motion.div
                   className={cn("p-3 rounded-xl", config.iconBg)}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -191,9 +191,9 @@ const ApprovalGate = ({
               {/* Details Section */}
               {Object.keys(details).length > 0 && (
                 <div>
-                  <button 
+                  <button
                     onClick={() => setShowDetails(!showDetails)}
-                    className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                   >
                     <Info size={16} />
                     {showDetails ? 'Hide' : 'View'} Details
@@ -204,21 +204,21 @@ const ApprovalGate = ({
                       <ChevronRight size={16} />
                     </motion.span>
                   </button>
-                  
+
                   <AnimatePresence>
                     {showDetails && (
-                      <motion.div 
+                      <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
                         className="mt-3 overflow-hidden"
                       >
-                        <div className="p-4 bg-gray-50 rounded-xl text-sm font-mono max-h-48 overflow-y-auto">
+                        <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm font-mono max-h-48 overflow-y-auto">
                           {Object.entries(details).map(([key, value]) => (
                             <div key={key} className="mb-2">
-                              <span className="text-gray-500">{key}:</span>{' '}
-                              <span className="text-gray-900">
+                              <span className="text-gray-500 dark:text-gray-400">{key}:</span>{' '}
+                              <span className="text-gray-900 dark:text-gray-200">
                                 {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
                               </span>
                             </div>
@@ -233,15 +233,15 @@ const ApprovalGate = ({
               {/* Risk Indicators */}
               {details.highRiskIndicators && details.highRiskIndicators.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="text-sm font-semibold text-gray-700">Risk Indicators:</h4>
+                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Risk Indicators:</h4>
                   <div className="flex flex-wrap gap-2">
                     {details.highRiskIndicators.map((indicator, idx) => (
-                      <motion.span 
+                      <motion.span
                         key={idx}
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: idx * 0.1 }}
-                        className="px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full"
+                        className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs font-medium rounded-full"
                       >
                         {indicator}
                       </motion.span>
@@ -252,20 +252,20 @@ const ApprovalGate = ({
 
               {/* Loading State */}
               {isLoading && (
-                <motion.div 
+                <motion.div
                   className="flex items-center justify-center py-4"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                 >
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
-                  <span className="ml-3 text-gray-600">Processing...</span>
+                  <span className="ml-3 text-gray-600 dark:text-gray-400">Processing...</span>
                 </motion.div>
               )}
             </div>
 
             {/* Actions */}
-            <motion.div 
-              className="p-6 border-t border-gray-100 bg-gray-50"
+            <motion.div
+              className="p-6 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -274,25 +274,25 @@ const ApprovalGate = ({
                 <motion.button
                   onClick={() => handleAction('reject')}
                   disabled={isLoading}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <XCircle size={18} />
                   Reject
                 </motion.button>
-                
+
                 <motion.button
                   onClick={() => handleAction('hold')}
                   disabled={isLoading}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Clock size={18} />
                   Hold
                 </motion.button>
-                
+
                 <motion.button
                   onClick={() => handleAction('approve')}
                   disabled={isLoading}
@@ -318,11 +318,11 @@ const ApprovalGate = ({
 /**
  * Inline Approval Banner (non-blocking)
  */
-export const ApprovalBanner = ({ 
-  approvalType, 
-  onProceed, 
+export const ApprovalBanner = ({
+  approvalType,
+  onProceed,
   onCancel,
-  children 
+  children
 }) => {
   const reason = APPROVAL_REASONS[approvalType] || {
     title: 'Approval Required',
@@ -334,7 +334,7 @@ export const ApprovalBanner = ({
   const IconComponent = config.icon;
 
   return (
-    <motion.div 
+    <motion.div
       className={cn("rounded-xl border p-4 mb-4", config.bgColor, config.borderColor)}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -353,7 +353,7 @@ export const ApprovalBanner = ({
           {onCancel && (
             <button
               onClick={onCancel}
-              className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-white/50 rounded-lg"
+              className="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-700/50 rounded-lg"
             >
               Cancel
             </button>

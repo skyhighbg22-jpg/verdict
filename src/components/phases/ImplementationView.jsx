@@ -47,8 +47,8 @@ const ImplementationView = () => {
 
   const handleStartExecution = async () => {
     setIsRunning(true);
-    setLogs([{ 
-      type: 'system', 
+    setLogs([{
+      type: 'system',
       message: '# Initializing VERDICT engine...',
       timestamp: new Date().toISOString()
     }]);
@@ -62,14 +62,14 @@ const ImplementationView = () => {
         timestamp: new Date().toISOString()
       }]);
     }
-    
+
     setIsRunning(false);
   };
 
   const handlePause = () => {
     setIsRunning(false);
-    setLogs(prev => [...prev, { 
-      type: 'system', 
+    setLogs(prev => [...prev, {
+      type: 'system',
       message: '# Execution paused by user',
       timestamp: new Date().toISOString()
     }]);
@@ -88,22 +88,22 @@ const ImplementationView = () => {
 
   const formatTimestamp = (ts) => {
     const date = new Date(ts);
-    return date.toLocaleTimeString('en-US', { 
-      hour12: false, 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit' 
+    return date.toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
     });
   };
 
   return (
     <div className="p-8 space-y-8">
-      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-        <div className="flex items-center gap-3 text-emerald-600">
+      <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-4">
+        <div className="flex items-center gap-3 text-emerald-600 dark:text-emerald-400">
           <Code size={28} />
           <div>
             <h2 className="text-2xl font-bold">Implementation Phase</h2>
-            <p className="text-gray-500 text-sm">Executing implementation logic and model inference.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Executing implementation logic and model inference.</p>
           </div>
         </div>
         <button
@@ -152,9 +152,9 @@ const ImplementationView = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Terminal Content */}
-            <div 
+            <div
               ref={terminalRef}
               className="p-6 font-mono text-sm leading-relaxed max-h-[400px] overflow-y-auto"
               style={{ background: 'linear-gradient(to bottom, #0f0f0f, #1a1a1a)' }}
@@ -163,7 +163,7 @@ const ImplementationView = () => {
               <div className="text-emerald-400"># Initializing VERDICT engine...</div>
               <div className="text-gray-500"># Loading Anchor context... DONE</div>
               <div className="text-gray-500"># Fetching Bytez inference...</div>
-              
+
               {taskGraph && (
                 <>
                   <div className="mt-2">
@@ -254,24 +254,24 @@ const ImplementationView = () => {
         {/* Engine State Sidebar */}
         <div className="lg:w-80 space-y-4">
           {/* Engine State */}
-          <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
-            <div className="flex items-center gap-2 mb-4 text-emerald-600 font-bold">
+          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4 shadow-sm">
+            <div className="flex items-center gap-2 mb-4 text-emerald-600 dark:text-emerald-400 font-bold">
               <Cpu size={18} />
               <h4 className="text-sm uppercase tracking-wider">Engine State</h4>
             </div>
             <div className="space-y-3">
-              <StateItem 
-                label="CPU Load" 
-                value={`${engineState.cpu}%`} 
+              <StateItem
+                label="CPU Load"
+                value={`${engineState.cpu}%`}
                 color={engineState.cpu > 70 ? 'red' : 'green'}
               />
-              <StateItem 
-                label="Memory" 
-                value={`${engineState.memory}GB`} 
+              <StateItem
+                label="Memory"
+                value={`${engineState.memory}GB`}
               />
-              <StateItem 
-                label="Latency" 
-                value={`${engineState.latency}ms`} 
+              <StateItem
+                label="Latency"
+                value={`${engineState.latency}ms`}
                 color={engineState.latency > 150 ? 'yellow' : 'green'}
               />
             </div>
@@ -281,23 +281,23 @@ const ImplementationView = () => {
           {verification && (
             <div className={clsx(
               "rounded-xl p-4 border",
-              verification.success ? "bg-green-50 border-green-100" : "bg-orange-50 border-orange-100"
+              verification.success ? "bg-green-50 dark:bg-green-900/20 border-green-100 dark:border-green-800" : "bg-orange-50 dark:bg-orange-900/20 border-orange-100 dark:border-orange-800"
             )}>
               <div className="flex items-center gap-2 mb-3">
                 {verification.success ? (
-                  <CheckCircle2 size={18} className="text-green-600" />
+                  <CheckCircle2 size={18} className="text-green-600 dark:text-green-400" />
                 ) : (
-                  <AlertCircle size={18} className="text-orange-600" />
+                  <AlertCircle size={18} className="text-orange-600 dark:text-orange-400" />
                 )}
                 <h4 className="font-bold text-sm">Verification Status</h4>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Tasks Completed</span>
+                  <span className="text-gray-600 dark:text-gray-400">Tasks Completed</span>
                   <span className="font-semibold">{verification.tasksCompleted}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Requirements Met</span>
+                  <span className="text-gray-600 dark:text-gray-400">Requirements Met</span>
                   <span className="font-semibold">
                     {(verification.causalRequirementsMet * 100).toFixed(0)}%
                   </span>
@@ -307,8 +307,8 @@ const ImplementationView = () => {
           )}
 
           {/* Quick Actions */}
-          <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-            <div className="flex items-center gap-2 mb-3 text-emerald-800 font-bold">
+          <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 rounded-xl p-4">
+            <div className="flex items-center gap-2 mb-3 text-emerald-800 dark:text-emerald-300 font-bold">
               <Zap size={18} />
               <h4 className="text-sm">Quick Action</h4>
             </div>
@@ -319,13 +319,13 @@ const ImplementationView = () => {
 
           {/* Active Tasks */}
           {taskGraph && (
-            <div className="bg-white border border-gray-100 rounded-xl p-4">
-              <h4 className="font-bold text-gray-800 mb-3 text-sm">Task Progress</h4>
+            <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-4">
+              <h4 className="font-bold text-gray-800 dark:text-gray-200 mb-3 text-sm">Task Progress</h4>
               <div className="space-y-2">
-                <ProgressBar 
-                  label="Completed" 
-                  value={completedTasks.length} 
-                  total={taskGraph.metadata?.totalTasks || 0} 
+                <ProgressBar
+                  label="Completed"
+                  value={completedTasks.length}
+                  total={taskGraph.metadata?.totalTasks || 0}
                   color="green"
                 />
               </div>
@@ -339,15 +339,15 @@ const ImplementationView = () => {
 
 const StateItem = ({ label, value, color = 'gray' }) => {
   const colorClasses = {
-    green: 'text-green-600',
-    yellow: 'text-yellow-600',
-    red: 'text-red-600',
-    gray: 'text-gray-800'
+    green: 'text-green-600 dark:text-green-400',
+    yellow: 'text-yellow-600 dark:text-yellow-400',
+    red: 'text-red-600 dark:text-red-400',
+    gray: 'text-gray-800 dark:text-gray-200'
   };
 
   return (
     <div className="flex justify-between items-center">
-      <span className="text-xs text-gray-500">{label}</span>
+      <span className="text-xs text-gray-500 dark:text-gray-400">{label}</span>
       <span className={clsx("text-xs font-mono font-bold", colorClasses[color])}>{value}</span>
     </div>
   );
@@ -356,14 +356,14 @@ const StateItem = ({ label, value, color = 'gray' }) => {
 const ProgressBar = ({ label, value, total, color }) => (
   <div>
     <div className="flex justify-between items-center text-xs mb-1">
-      <span className="text-gray-500">{label}</span>
+      <span className="text-gray-500 dark:text-gray-400">{label}</span>
       <span className="font-semibold">{value}/{total}</span>
     </div>
-    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-      <div 
+    <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+      <div
         className={clsx(
           "h-full transition-all duration-500",
-          color === 'green' ? "bg-green-500" : 
+          color === 'green' ? "bg-green-500" :
           color === 'blue' ? "bg-blue-500" : "bg-gray-500"
         )}
         style={{ width: `${total > 0 ? (value / total) * 100 : 0}%` }}
