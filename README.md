@@ -53,10 +53,10 @@ npm run dev
 - **OpenRouter** - Multi-model access (Claude 3, Grok, etc.)
 - **NVIDIA** - Step Flash and Nemotron 3 Super models
 
-### Testing Mode
+### Testing Mode & Free Mode
 
 Set `VITE_TESTING_MODE=true` to route all requests through OpenRouter with specific free models:
-- Single API key required (OpenRouter)
+- Single API key required (OpenRouter or Groq)
 - Uses free models including:
   - openrouter/hunter-alpha (main model - more smarter)
   - minimax/minimax-m2.5:free (second main model)
@@ -64,6 +64,8 @@ Set `VITE_TESTING_MODE=true` to route all requests through OpenRouter with speci
 - Faster development iteration
 - Simplified debugging
 - Reduced API costs
+
+**Free Mode**: Automatically activates when no enterprise credentials are configured, using fallback free models through OpenRouter.
 
 ### Automatic Fallback
 
@@ -90,13 +92,13 @@ All services use `bytezClient.runInference(modelId, input)`, which routes to the
 ## Supported Models
 
 | Model ID | Purpose | Primary Provider |
-|-----------|---------|-----------------|
-| `gpt-5.4-pro` | TDS analysis, GDE decomposition | OpenAI |
-| `grok-4.2` | Skeptic validation, adversarial reasoning | Groq |
-| `gemini-3.1-pro` | Advisory queries | Gemini |
-| `claude-opus-4.6` | Planning, nuance analysis | OpenRouter |
-| `step-flash` | Fast inference | NVIDIA |
-| `nemotron-3-super` | General purpose model | NVIDIA |
+|----------|---------|-----------------|
+| `GPT-5.4-Pro` | TDS analysis, GDE decomposition | OpenAI |
+| `Grok-4.2` | Skeptic validation, adversarial reasoning | Groq |
+| `Gemini-3.1-Pro` | Advisory queries | Gemini |
+| `Claude-Opus-4.6` | Planning, nuance analysis | OpenRouter |
+| `Step-Flash` | Fast inference | NVIDIA |
+| `Nemotron-3-Super` | General purpose model | NVIDIA |
 
 ## Scripts
 
@@ -124,6 +126,7 @@ For production deployment, set these in your hosting platform:
 - `VITE_GROQ_API_KEY` (required for testing mode)
 - `VITE_BYTEZ_API_KEY` (optional)
 - `VITE_OPENROUTER_API_KEY` (optional)
+- `VITE_NVIDIA_API_KEY` (optional)
 - `VITE_TESTING_MODE` (default: false)
 
 ## API Providers
@@ -149,6 +152,16 @@ For production deployment, set these in your hosting platform:
 - Access to multiple models
 - Pass-through pricing
 
+### NVIDIA
+- Website: https://api.nvidia.com/
+- Step Flash and Nemotron 3 Super models
+- Competitive inference pricing
+
+### Bytez
+- Website: https://bytez.com
+- Unified provider interface
+- Multi-model access
+
 ## Project Structure
 
 ```
@@ -162,17 +175,33 @@ src/
 │   │   ├── geminiProvider.js
 │   │   ├── groqProvider.js
 │   │   ├── bytezProvider.js
-│   │   └── openrouterProvider.js
-│   └── __test__/           # Integration tests
+│   │   ├── openrouterProvider.js
+│   │   ├── nvidiaProvider.js
+│   │   └── freeModeProvider.js
+│   └── __test__/            # Integration tests
 ├── services/
 │   ├── tdsRouter.js         # Task Difficulty Score
-│   ├── gde.js              # Goal Decomposition Engine
-│   ├── causalValidator.js    # Causal Chain Validation
+│   ├── gde.js               # Goal Decomposition Engine
+│   ├── causalValidator.js   # Causal Chain Validation
+│   ├── pipelineEngine.js    # Pipeline orchestration
+│   ├── miraEngine.js        # MIRA processing engine
+│   ├── auditLog.js          # Request logging
 │   ├── planning/            # Four-Branch Planning
 │   ├── verification/        # Skeptic Agent
-│   └── advisory/           # Advisory Layer
+│   ├── advisory/            # Advisory Layer
+│   ├── preflight/           # Preflight checks
+│   ├── security/            # Security validation
+│   ├── selfCritique/        # Self-critique agent
+│   └── state/               # State management
+├── components/
+│   ├── layout/              # Layout components
+│   ├── metrics/             # Metrics display
+│   ├── navigation/          # Navigation components
+│   ├── phases/              # Pipeline phase components
+│   ├── shared/              # Shared UI components
+│   └── versions/           # Version management
 └── context/
-    └── PipelineContext.jsx   # Pipeline Orchestrator
+    └── PipelineContext.jsx  # Pipeline Orchestrator
 ```
 
 ## Backward Compatibility
@@ -210,6 +239,18 @@ The refactored API maintains full backward compatibility:
 3. Add credits
 4. Generate API key
 5. Add to `.env.local`
+
+### NVIDIA
+1. Visit https://api.nvidia.com/
+2. Create account or sign in
+3. Generate API key
+4. Add to `.env.local`
+
+### Bytez
+1. Visit https://bytez.com
+2. Create account
+3. Generate API key
+4. Add to `.env.local`
 
 ## Troubleshooting
 
