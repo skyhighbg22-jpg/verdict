@@ -16,7 +16,7 @@
  * - Normal Mode: Requests route to optimal providers with fallback chain
  */
 
-import { PIPELINE_STATUS } from '../services/pipelineEngine';
+import { PIPELINE_STATUS } from '../types/pipeline.js';
 import { routeRequest, getEnvironmentStatus } from './apiRouter.js';
 
 class BytezClient {

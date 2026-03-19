@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Sliders, Target, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { usePipeline, PHASES } from '../../context/PipelineContext';
-import { PIPELINE_STATUS } from '../../services/pipelineEngine';
+import { PIPELINE_STATUS } from '../../types/pipeline.js';
 import ApprovalGate, { APPROVAL_TYPES } from '../shared/ApprovalGate';
 import { clsx } from 'clsx';
 

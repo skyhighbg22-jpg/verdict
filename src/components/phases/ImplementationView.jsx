@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Code, Terminal, Cpu, Zap, Play, Pause, Square, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { usePipeline, PHASES } from '../../context/PipelineContext';
-import { PIPELINE_STATUS } from '../../services/pipelineEngine';
+import { PIPELINE_STATUS } from '../../types/pipeline.js';
 import { clsx } from 'clsx';
 
 const ImplementationView = () => {
