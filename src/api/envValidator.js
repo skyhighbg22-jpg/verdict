@@ -32,9 +32,9 @@ export const validateEnvironment = () => {
     config: {}
   };
 
-  // Check for testing mode
-  const testingMode = import.meta.env.VITE_TESTING_MODE === 'true';
-  result.testingMode = testingMode;
+   // Check for testing mode
+   const testingMode = String(import.meta.env.VITE_TESTING_MODE) === 'true';
+   result.testingMode = testingMode;
 
   // Validate provider keys
   const availableProviders = [];

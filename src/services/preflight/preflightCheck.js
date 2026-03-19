@@ -296,7 +296,7 @@ class PreFlightCheck {
       }
     });
 
-    const passed = configured.length > 0 || env.VITE_TESTING_MODE === 'true';
+    const passed = configured.length > 0 || String(env.VITE_TESTING_MODE) === 'true';
 
     return {
       name: 'Environment Validation',
